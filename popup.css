@@ -1,0 +1,234 @@
+:root {
+  --ink: #12151c;
+  --panel: #1a1f2a;
+  --paper: #ede6da;
+  --mute: #8a909b;
+  --line: #2c3340;
+  --ember: #ff6b2c;
+  --ok: #5ee4a3;
+  --off: #c45c5c;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  width: 300px;
+  background: var(--ink);
+  color: var(--paper);
+  font: 13px/1.45 "Segoe UI", "Helvetica Neue", system-ui, sans-serif;
+}
+
+body {
+  padding: 16px 16px 14px;
+}
+
+.mast {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.mark {
+  border-radius: 7px;
+  display: block;
+}
+
+.eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--mute);
+}
+
+h1 {
+  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", serif;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.stamp {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 14px 14px 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.stamp::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: var(--ember);
+}
+
+.stamp.is-off::before {
+  background: var(--off);
+}
+
+.stamp-label {
+  font-family: "Iowan Old Style", Palatino, serif;
+  font-size: 22px;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.stamp-copy {
+  color: var(--mute);
+  font-size: 12px;
+  margin-bottom: 12px;
+}
+
+.switch {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.switch input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.track {
+  width: 36px;
+  height: 20px;
+  border-radius: 999px;
+  background: #3a3140;
+  position: relative;
+  flex: none;
+  transition: background 0.15s ease;
+}
+
+.track::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--paper);
+  transition: transform 0.15s ease;
+}
+
+.switch input:checked + .track {
+  background: var(--ember);
+}
+
+.switch input:checked + .track::after {
+  transform: translateX(16px);
+}
+
+.switch input:focus-visible + .track {
+  outline: 2px solid var(--paper);
+  outline-offset: 2px;
+}
+
+.switch-text {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ok);
+}
+
+.stamp.is-off .switch-text {
+  color: var(--off);
+}
+
+.opt {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 12px 0 4px;
+  padding: 10px 12px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.opt-title {
+  display: block;
+  font-size: 13px;
+  color: var(--paper);
+}
+
+.opt-copy {
+  display: block;
+  margin-top: 2px;
+  font-size: 11px;
+  color: var(--mute);
+}
+
+.opt-switch {
+  position: relative;
+  flex: none;
+}
+
+.opt-switch input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.opt-switch input:checked + .track {
+  background: var(--ember);
+}
+
+.opt-switch input:checked + .track::after {
+  transform: translateX(16px);
+}
+
+.opt-switch input:focus-visible + .track {
+  outline: 2px solid var(--paper);
+  outline-offset: 2px;
+}
+
+.stripped {
+  list-style: none;
+  margin: 10px 0 12px;
+  color: var(--mute);
+}
+
+.stripped li {
+  position: relative;
+  padding: 4px 0 4px 16px;
+  font-size: 12px;
+}
+
+.stripped li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 11px;
+  width: 7px;
+  height: 1px;
+  background: var(--ember);
+}
+
+.note {
+  font-size: 11px;
+  color: var(--mute);
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
+}
+
+.note strong {
+  color: var(--paper);
+  font-weight: 600;
+}

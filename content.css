@@ -1,0 +1,95 @@
+/* Instant hide — runs at document_start before Reddit paints the wall. */
+
+html.rnp-off #desktop-dynamic-upsell-dialog,
+html.rnp-off #blocking-modal,
+html.rnp-off #credential_picker_container {
+  display: revert !important;
+}
+
+html:not(.rnp-off) #desktop-dynamic-upsell-dialog,
+html:not(.rnp-off) [id="desktop-dynamic-upsell-dialog"],
+html:not(.rnp-off) #blocking-modal,
+html:not(.rnp-off) faceplate-modal#blocking-modal,
+html:not(.rnp-off) #blocking-modal-contents,
+html:not(.rnp-off) #nsfw-qr-dialog,
+html:not(.rnp-off) .rpl-bottom-sheet,
+html:not(.rnp-off) xpromo-nsfw-blocking-modal-desktop,
+html:not(.rnp-off) xpromo-nsfw-bypassable-modal-desktop,
+html:not(.rnp-off) .configured-xpromo-modal,
+html:not(.rnp-off) #credential_picker_container,
+html:not(.rnp-off) #credential_picker_iframe,
+html:not(.rnp-off) iframe#credential_picker_iframe,
+html:not(.rnp-off) iframe[src*="accounts.google.com/gsi"],
+html:not(.rnp-off) div[id^="credential_picker"],
+html:not(.rnp-off) shreddit-async-loader[bundlename*="xpromo"],
+html:not(.rnp-off) shreddit-async-loader[bundlename*="Promo"],
+html:not(.rnp-off) shreddit-async-loader[bundlename*="upsell"],
+html:not(.rnp-off) [aria-label="Sign in to Reddit with Google"] {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
+  max-height: 0 !important;
+  overflow: hidden !important;
+}
+
+/* Restore scrolling that Reddit locks while the wall is up. */
+html:not(.rnp-off),
+html:not(.rnp-off) body,
+html:not(.rnp-off).rpl-scroll-lock,
+html:not(.rnp-off).scroll-is-blocked,
+html:not(.rnp-off) body.rpl-scroll-lock,
+html:not(.rnp-off) body.scroll-is-blocked,
+html:not(.rnp-off) body.scroll-disabled {
+  overflow: auto !important;
+  overflow-y: auto !important;
+  pointer-events: auto !important;
+  touch-action: auto !important;
+}
+
+html:not(.rnp-off) .sidebar-grid,
+html:not(.rnp-off) shreddit-app,
+html:not(.rnp-off) #main-content,
+html:not(.rnp-off) main {
+  filter: none !important;
+  pointer-events: auto !important;
+}
+
+/* Promoted posts, sidebar units, comment ads — reversible via .rnp-ads-off */
+html:not(.rnp-ads-off) shreddit-ad-post,
+html:not(.rnp-ads-off) shreddit-comments-page-ad,
+html:not(.rnp-ads-off) shreddit-sidebar-ad,
+html:not(.rnp-ads-off) shreddit-ad-search-results,
+html:not(.rnp-ads-off) shreddit-post[promoted],
+html:not(.rnp-ads-off) shreddit-post[promoted=""],
+html:not(.rnp-ads-off) shreddit-post[promoted="true"],
+html:not(.rnp-ads-off) shreddit-post[is-promoted],
+html:not(.rnp-ads-off) shreddit-post[is-promoted="true"],
+html:not(.rnp-ads-off) article[promoted],
+html:not(.rnp-ads-off) article[aria-label="Advertisement"],
+html:not(.rnp-ads-off) [slot="promoted"],
+html:not(.rnp-ads-off) [data-testid="ad-post"],
+html:not(.rnp-ads-off) [data-before-content="promoted"],
+html:not(.rnp-ads-off) faceplate-tracker[noun="ad"],
+html:not(.rnp-ads-off) faceplate-tracker[noun="promoted"],
+html:not(.rnp-ads-off) shreddit-async-loader[bundlename*="ads_"],
+html:not(.rnp-ads-off) shreddit-async-loader[bundlename*="Ads"],
+html:not(.rnp-ads-off) shreddit-async-loader[bundlename*="sidebar_ad"],
+html:not(.rnp-ads-off) .promotedlink,
+html:not(.rnp-ads-off) .thing.promoted,
+html:not(.rnp-ads-off) .organic-listing .promoted,
+html:not(.rnp-ads-off) .native-ad-container,
+html:not(.rnp-ads-off) .premium-banner-outer,
+html:not(.rnp-ads-off) .premium-banner,
+html:not(.rnp-ads-off) aside .promotedlink,
+html:not(.rnp-ads-off) .rnp-hidden-ad {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  height: 0 !important;
+  max-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  border: 0 !important;
+}

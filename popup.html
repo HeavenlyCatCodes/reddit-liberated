@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Reddit Liberated</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header class="mast">
+      <img class="mark" src="icons/icon48.png" alt="" width="28" height="28" />
+      <div>
+        <p class="eyebrow">reddit.com</p>
+        <h1>Liberated</h1>
+      </div>
+    </header>
+
+    <section class="stamp" id="statusCard">
+      <p class="stamp-label" id="stampLabel">Walls down</p>
+      <p class="stamp-copy" id="stampCopy">
+        Signup modals, Google One Tap, and scroll locks are stripped while you browse.
+      </p>
+      <label class="switch">
+        <input type="checkbox" id="toggle" checked />
+        <span class="track" aria-hidden="true"></span>
+        <span class="switch-text" id="toggleText">On</span>
+      </label>
+    </section>
+
+    <label class="opt" for="adsToggle">
+      <span>
+        <span class="opt-title">Hide ads</span>
+        <span class="opt-copy">Promoted posts, sidebar units, comment ads</span>
+      </span>
+      <span class="opt-switch">
+        <input type="checkbox" id="adsToggle" checked />
+        <span class="track" aria-hidden="true"></span>
+      </span>
+    </label>
+
+    <ul class="stripped">
+      <li>Center login / signup modal</li>
+      <li>Google “Sign in with Google” card</li>
+      <li>Logged-out signup rail</li>
+      <li>NSFW login wall + blur</li>
+      <li>Promoted posts and sidebar ads</li>
+    </ul>
+
+    <p class="note">The header <strong>Log In</strong> button stays. Use it when you actually want an account.</p>
+
+    <script src="popup.js"></script>
+  </body>
+</html>
