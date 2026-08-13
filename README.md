@@ -10,8 +10,8 @@ If Reddit blocks the page with “Join the most real place on the internet,” a
 
 | Browser | Zip |
 | --- | --- |
-| Chrome, Edge, Brave, Arc | [reddit-liberated-chrome-1.1.0.zip](https://github.com/HeavenlyCatCodes/reddit-liberated/releases/download/v1.1.0/reddit-liberated-chrome-1.1.0.zip) |
-| Firefox | [reddit-liberated-firefox-1.1.0.zip](https://github.com/HeavenlyCatCodes/reddit-liberated/releases/download/v1.1.0/reddit-liberated-firefox-1.1.0.zip) |
+| Chrome, Edge, Brave, Arc | [reddit-liberated-chrome-1.2.0.zip](https://github.com/HeavenlyCatCodes/reddit-liberated/releases/download/v1.2.0/reddit-liberated-chrome-1.2.0.zip) |
+| Firefox | [reddit-liberated-firefox-1.2.0.zip](https://github.com/HeavenlyCatCodes/reddit-liberated/releases/download/v1.2.0/reddit-liberated-firefox-1.2.0.zip) |
 
 ## What Reddit Liberated removes
 
@@ -29,7 +29,7 @@ Works on `www.reddit.com`, `old.reddit.com`, `new.reddit.com`, and other `*.redd
 
 ## Install on Chrome, Edge, Brave, or Arc
 
-1. Download [reddit-liberated-chrome-1.1.0.zip](https://github.com/HeavenlyCatCodes/reddit-liberated/releases/download/v1.1.0/reddit-liberated-chrome-1.1.0.zip).
+1. Download [reddit-liberated-chrome-1.2.0.zip](https://github.com/HeavenlyCatCodes/reddit-liberated/releases/download/v1.2.0/reddit-liberated-chrome-1.2.0.zip).
 2. Unzip it to a folder you will keep (Chrome loads the extension from that path).
 3. Open `chrome://extensions` (or `edge://extensions`).
 4. Turn on **Developer mode** (top right).
@@ -43,7 +43,7 @@ If Chrome says the extension was disabled after a restart, open `chrome://extens
 
 ## Install on Firefox
 
-1. Download [reddit-liberated-firefox-1.1.0.zip](https://github.com/HeavenlyCatCodes/reddit-liberated/releases/download/v1.1.0/reddit-liberated-firefox-1.1.0.zip).
+1. Download [reddit-liberated-firefox-1.2.0.zip](https://github.com/HeavenlyCatCodes/reddit-liberated/releases/download/v1.2.0/reddit-liberated-firefox-1.2.0.zip).
 2. Open `about:debugging#/runtime/this-firefox`.
 3. Click **Load Temporary Add-on…**.
 4. Choose the zip, or unzip it and choose `manifest.json`.
@@ -73,8 +73,8 @@ powershell -File scripts\pack.ps1
 
 That writes versioned zips to `dist/`:
 
-- `reddit-liberated-chrome-1.1.0.zip`
-- `reddit-liberated-firefox-1.1.0.zip`
+- `reddit-liberated-chrome-1.2.0.zip`
+- `reddit-liberated-firefox-1.2.0.zip`
 
 Load the unzipped project folder as an unpacked extension if you are editing the code.
 
@@ -94,6 +94,10 @@ Firefox only allows unsigned extensions as temporary add-ons. Load the zip again
 
 **Is this on the Chrome Web Store?**  
 Not yet. Install it from the [GitHub release zips](https://github.com/HeavenlyCatCodes/reddit-liberated/releases/latest) with Developer mode.
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md) for what changed in each version.
 
 ## License
 
