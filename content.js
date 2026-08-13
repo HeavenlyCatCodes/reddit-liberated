@@ -161,43 +161,118 @@
     }
   }
 
-  function patchCustomElements() {
-    if (!showNsfw || !window.customElements || customElements.define._rnp) return;
-    const define = customElements.define.bind(customElements);
-    customElements.define = function patchedDefine(name, Ctor, opts) {
-      if (name === "shreddit-aspect-ratio") {
-        class PatchedAspect extends Ctor {
-          connectedCallback() {
-            this.removeAttribute("is-nsfw-blocked");
-            super.connectedCallback?.();
-          }
-          attributeChangedCallback(attr, oldVal, newVal) {
-            if (attr === "is-nsfw-blocked") return;
-            super.attributeChangedCallback?.(attr, oldVal, newVal);
-          }
-        }
-        return define(name, PatchedAspect, opts);
-      }
-      if (name === "shreddit-blurred-container") {
-        class PatchedBlur extends Ctor {
-          connectedCallback() {
-            try {
-              this.isNsfwAllowed = true;
-              this.blurred = false;
-            } catch {
-              /* ignore */
-            }
-            super.connectedCallback?.();
-          }
-        }
-        return define(name, PatchedBlur, opts);
-      }
-      return define(name, Ctor, opts);
-    };
-    customElements.define._rnp = true;
+  if (showNsfw) setOver18Cookie();
+
+  function openNsfwHost(el) {
+    if (!el) return;
+    const reason = `${el.reason || ""}`.toLowerCase();
+    if (reason === "spoiler") return;
+    try {
+      el.isNsfwAllowed = true;
+      el.blurred = false;
+      el.isBlurred = false;
+      if ("_blur" in el) el._blur = false;
+    } catch {
+      /* ignore */
+    }
+    el.removeAttribute("is-nsfw-blocked");
+    el.removeAttribute("blurred");
   }
 
-  patchCustomElements();
+  function projectXpromoMedia(el) {
+    const root = el.shadowRoot;
+    if (!root) return;
+    if (!root.querySelector("slot[data-rnp]")) {
+      const slot = document.createElement("slot");
+      slot.dataset.rnp = "1";
+      root.append(slot);
+    }
+    const prompt = root.querySelector(".prompt");
+    if (prompt) prompt.style.setProperty("display", "none", "important");
+  }
+
+  function wrapProto(name, method, before) {
+    customElements.whenDefined(name).then((ctor) => {
+      const proto = ctor.prototype;
+      if (!proto[method] || proto[method]._rnp) return;
+      const original = proto[method];
+      const wrapped = function wrappedMethod(...args) {
+        if (showNsfw) before(this);
+        return original.apply(this, args);
+      };
+      wrapped._rnp = true;
+      proto[method] = wrapped;
+    }).catch(() => {});
+  }
+
+  function hookNsfwComponents() {
+    if (!window.customElements) return;
+    wrapProto("shreddit-blurred-container", "render", openNsfwHost);
+    wrapProto("shreddit-blurred-container", "update", openNsfwHost);
+    wrapProto("community-highlight-card", "render", openNsfwHost);
+    wrapProto("devvit2-blur-gate", "update", openNsfwHost);
+    wrapProto("xpromo-nsfw-blocking-container", "update", projectXpromoMedia);
+    wrapProto("shreddit-aspect-ratio", "connectedCallback", (el) => {
+      el.removeAttribute("is-nsfw-blocked");
+    });
+    wrapProto("shreddit-embed", "update", (el) => {
+      try {
+        if (!el.mounted && typeof el.setupEmbed === "function") el.setupEmbed();
+      } catch {
+        /* ignore */
+      }
+    });
+    wrapProto("shreddit-player", "connectedCallback", (el) => {
+      try {
+        el.isNsfwAllowed = true;
+      } catch {
+        /* ignore */
+      }
+    });
+    wrapProto("shreddit-player-2", "connectedCallback", (el) => {
+      try {
+        el.isNsfwAllowed = true;
+      } catch {
+        /* ignore */
+      }
+    });
+
+    if (!customElements.define._rnp) {
+      const define = customElements.define.bind(customElements);
+      customElements.define = function patchedDefine(name, Ctor, opts) {
+        if (showNsfw && name === "shreddit-aspect-ratio") {
+          class PatchedAspect extends Ctor {
+            connectedCallback() {
+              this.removeAttribute("is-nsfw-blocked");
+              super.connectedCallback?.();
+            }
+            attributeChangedCallback(attr, oldVal, newVal) {
+              if (attr === "is-nsfw-blocked") return;
+              super.attributeChangedCallback?.(attr, oldVal, newVal);
+            }
+          }
+          return define(name, PatchedAspect, opts);
+        }
+        if (showNsfw && (name === "shreddit-player" || name === "shreddit-player-2")) {
+          class PatchedPlayer extends Ctor {
+            connectedCallback() {
+              try {
+                this.isNsfwAllowed = true;
+              } catch {
+                /* ignore */
+              }
+              super.connectedCallback?.();
+            }
+          }
+          return define(name, PatchedPlayer, opts);
+        }
+        return define(name, Ctor, opts);
+      };
+      customElements.define._rnp = true;
+    }
+  }
+
+  hookNsfwComponents();
 
   function unlockScroll() {
     const roots = [document.documentElement, document.body].filter(Boolean);
@@ -281,23 +356,15 @@
   }
 
   function sweepShadowHosts() {
-    const hosts = document.querySelectorAll(
-      "faceplate-modal, xpromo-nsfw-blocking-container, shreddit-blurred-container"
-    );
+    const hosts = document.querySelectorAll("faceplate-modal");
     for (const host of hosts) {
       const root = host.shadowRoot;
       if (!root) continue;
-      const prompt = root.querySelector(".prompt, [role='dialog'], #blocking-modal");
+      const prompt = root.querySelector("[role='dialog'], #blocking-modal");
       if (prompt) prompt.style.setProperty("display", "none", "important");
-      if (showNsfw && host.tagName === "SHREDDIT-BLURRED-CONTAINER") {
-        try {
-          host.isNsfwAllowed = true;
-          host.blurred = false;
-        } catch {
-          /* ignore */
-        }
-      }
     }
+    if (!showNsfw) return;
+    document.querySelectorAll("xpromo-nsfw-blocking-container").forEach(projectXpromoMedia);
   }
 
   function closestWallHost(el) {
@@ -462,6 +529,80 @@
     }
   }
 
+  function playerLooksBroken(player) {
+    const root = player.shadowRoot;
+    const hay = `${player.textContent || ""} ${root ? root.textContent || "" : ""}`.toLowerCase();
+    if (
+      hay.includes("cannot be played") ||
+      hay.includes("couldn't play") ||
+      hay.includes("could not play") ||
+      hay.includes("unable to play") ||
+      hay.includes("video unavailable") ||
+      hay.includes("playback error")
+    ) {
+      return true;
+    }
+    const video = (root && root.querySelector("video")) || player.querySelector("video");
+    return Boolean(video && video.error);
+  }
+
+  function remountPlayer(player) {
+    if (player.dataset.rnpRevived === "1") return;
+    player.dataset.rnpRevived = "1";
+    const clone = player.cloneNode(true);
+    clone.dataset.rnpRevived = "1";
+    for (const name of ["src", "packaged-media-json", "dash-src", "hls-src", "poster", "preview"]) {
+      const value = player.getAttribute(name);
+      if (value) clone.setAttribute(name, value);
+    }
+    try {
+      if (player.packagedMediaJson && !clone.getAttribute("packaged-media-json")) {
+        const packed =
+          typeof player.packagedMediaJson === "string"
+            ? player.packagedMediaJson
+            : JSON.stringify(player.packagedMediaJson);
+        clone.setAttribute("packaged-media-json", packed);
+      }
+    } catch {
+      /* ignore */
+    }
+    player.replaceWith(clone);
+  }
+
+  function hydrateDeferredEmbeds() {
+    document.querySelectorAll("shreddit-embed").forEach((el) => {
+      try {
+        if (!el.mounted && typeof el.setupEmbed === "function") el.setupEmbed();
+      } catch {
+        /* ignore */
+      }
+      if (!el.hasAttribute("data-embed-obscured-deferred") || !el.html) return;
+      if (el.dataset.rnpRevived === "1") return;
+      el.dataset.rnpRevived = "1";
+      try {
+        const fragment = document.createRange().createContextualFragment(el.html);
+        el.replaceWith(fragment);
+      } catch {
+        /* ignore */
+      }
+    });
+  }
+
+  function reviveNsfwMedia() {
+    if (!showNsfw || !document.body) return;
+    hydrateDeferredEmbeds();
+    document
+      .querySelectorAll("shreddit-player, shreddit-player-2")
+      .forEach((player) => {
+        try {
+          player.isNsfwAllowed = true;
+        } catch {
+          /* ignore */
+        }
+        if (playerLooksBroken(player)) remountPlayer(player);
+      });
+  }
+
   function clickNsfwButtons() {
     const nodes = document.querySelectorAll("button, a, [role='button']");
     for (const node of nodes) {
@@ -488,32 +629,9 @@
     document.querySelectorAll("shreddit-aspect-ratio[is-nsfw-blocked]").forEach((el) => {
       el.removeAttribute("is-nsfw-blocked");
     });
-
-    document.querySelectorAll("shreddit-blurred-container").forEach((el) => {
-      try {
-        el.isNsfwAllowed = true;
-        el.blurred = false;
-        if (!el.dataset.rnpRevealed && typeof el.handleClick === "function") {
-          el.dataset.rnpRevealed = "1";
-          el.handleClick();
-        }
-      } catch {
-        /* ignore */
-      }
-      el.removeAttribute("blurred");
-      const root = el.shadowRoot;
-      if (!root) return;
-      root.querySelectorAll(".prompt, .blurred, .overlay").forEach((layer) => {
-        layer.style.setProperty("display", "none", "important");
-      });
-    });
-
+    document.querySelectorAll("shreddit-blurred-container").forEach(openNsfwHost);
     document.querySelectorAll("community-highlight-card").forEach((el) => {
-      try {
-        el.isBlurred = false;
-      } catch {
-        /* ignore */
-      }
+      openNsfwHost(el);
       const root = el.shadowRoot;
       if (root && !root.querySelector("#rnp-nsfw")) {
         const style = document.createElement("style");
@@ -522,15 +640,8 @@
         root.prepend(style);
       }
     });
-
-    document.querySelectorAll("devvit2-blur-gate").forEach((el) => {
-      try {
-        el._blur = false;
-      } catch {
-        /* ignore */
-      }
-    });
-
+    document.querySelectorAll("devvit2-blur-gate").forEach(openNsfwHost);
+    document.querySelectorAll("xpromo-nsfw-blocking-container").forEach(projectXpromoMedia);
     document.querySelectorAll("rpl-dialog[dialog-id*='nsfw_blocking']").forEach(removeNode);
     document.querySelectorAll(".thumbnail-blur").forEach((el) => {
       el.classList.remove("thumbnail-blur");
@@ -538,6 +649,7 @@
     });
 
     clickNsfwButtons();
+    reviveNsfwMedia();
   }
 
   function setNsfwEnabled(next) {
@@ -550,7 +662,7 @@
     }
     if (next) {
       document.documentElement.classList.remove("rnp-nsfw-off");
-      patchCustomElements();
+      hookNsfwComponents();
       revealNsfw();
     } else {
       document.documentElement.classList.add("rnp-nsfw-off");
@@ -680,7 +792,7 @@
     showNsfw = nsfw;
     if (nsfw) {
       document.documentElement.classList.remove("rnp-nsfw-off");
-      patchCustomElements();
+      hookNsfwComponents();
     } else {
       document.documentElement.classList.add("rnp-nsfw-off");
     }

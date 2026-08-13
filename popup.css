@@ -17,7 +17,9 @@
 
 html,
 body {
-  width: 300px;
+  width: 320px;
+  max-width: 320px;
+  overflow-x: hidden;
   background: var(--ink);
   color: var(--paper);
   font: 13px/1.45 "Segoe UI", "Helvetica Neue", system-ui, sans-serif;
@@ -93,6 +95,7 @@ h1 {
   display: flex;
   align-items: center;
   gap: 10px;
+  position: relative;
   cursor: pointer;
   user-select: none;
 }
@@ -162,6 +165,11 @@ h1 {
   cursor: pointer;
 }
 
+.opt > span:first-child {
+  min-width: 0;
+  flex: 1;
+}
+
 .stamp + .opt {
   margin-top: 12px;
 }
@@ -177,11 +185,14 @@ h1 {
   margin-top: 2px;
   font-size: 11px;
   color: var(--mute);
+  overflow-wrap: anywhere;
 }
 
 .opt-switch {
   position: relative;
-  flex: none;
+  flex: 0 0 36px;
+  width: 36px;
+  height: 20px;
 }
 
 .opt-switch input {
