@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Reddit Liberated",
-  "version": "1.1.0",
-  "description": "Removes Reddit login walls, signup modals, and promoted ads so you can keep reading.",
+  "version": "1.2.0",
+  "description": "Removes Reddit login walls, signup modals, promoted ads, and NSFW click-to-view gates.",
   "icons": {
     "16": "icons/icon16.png",
     "32": "icons/icon32.png",

@@ -18,7 +18,7 @@ If Reddit blocks the page with “Join the most real place on the internet,” a
 - The center **login / signup modal** (“Join the most real place on the internet”)
 - The **Sign in to Reddit with Google** One Tap card
 - The logged-out **signup rail** on the left
-- **NSFW / 18+** login walls and blur overlays
+- **NSFW / 18+** login walls, “View NSFW content” clicks, and media blur
 - **Get the app** banners that lock the page
 - The **scroll lock** Reddit applies while those overlays are up
 - **Promoted posts**, sidebar ad units, comment-page ads, and Premium upsell banners
@@ -57,6 +57,7 @@ Click the **Reddit Liberated** icon in the toolbar.
 
 - **Walls down** — login popups, Google One Tap, and scroll locks stay stripped.
 - **Hide ads** — promoted feed posts, sidebar units, and comment ads stay hidden. Turn this off if you want ads back without reloading.
+- **Show NSFW** — skips “View NSFW content” and unblurs media. Turn this off if you want Reddit’s click-to-view gate back (reloads the tab).
 
 ## Privacy
 

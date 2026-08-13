@@ -154,12 +154,16 @@ h1 {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin: 12px 0 4px;
+  margin: 8px 0 0;
   padding: 10px 12px;
   background: var(--panel);
   border: 1px solid var(--line);
   border-radius: 10px;
   cursor: pointer;
+}
+
+.stamp + .opt {
+  margin-top: 12px;
 }
 
 .opt-title {

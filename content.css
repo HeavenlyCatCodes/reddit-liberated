@@ -93,3 +93,40 @@ html:not(.rnp-ads-off) .rnp-hidden-ad {
   overflow: hidden !important;
   border: 0 !important;
 }
+
+/* Auto-reveal NSFW media — reversible via .rnp-nsfw-off */
+html:not(.rnp-nsfw-off) shreddit-aspect-ratio[is-nsfw-blocked] > *,
+html:not(.rnp-nsfw-off) shreddit-aspect-ratio[is-nsfw-blocked] img,
+html:not(.rnp-nsfw-off) shreddit-aspect-ratio[is-nsfw-blocked] video,
+html:not(.rnp-nsfw-off) shreddit-aspect-ratio[is-nsfw-blocked] shreddit-player,
+html:not(.rnp-nsfw-off) shreddit-blurred-container,
+html:not(.rnp-nsfw-off) shreddit-blurred-container img,
+html:not(.rnp-nsfw-off) shreddit-blurred-container video,
+html:not(.rnp-nsfw-off) .thumbnail-blur,
+html:not(.rnp-nsfw-off) .blur-\[6px\],
+html:not(.rnp-nsfw-off) img.blurred,
+html:not(.rnp-nsfw-off) video.blurred,
+html:not(.rnp-nsfw-off) .media-element.blurred {
+  filter: none !important;
+  -webkit-filter: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+
+html:not(.rnp-nsfw-off) rpl-dialog[dialog-id*="nsfw_blocking"],
+html:not(.rnp-nsfw-off) #nsfw-qr-dialog,
+html:not(.rnp-nsfw-off) xpromo-nsfw-blocking-container,
+html:not(.rnp-nsfw-off) xpromo-nsfw-blocking-modal-desktop,
+html:not(.rnp-nsfw-off) xpromo-nsfw-bypassable-modal-desktop,
+html:not(.rnp-nsfw-off) [id*="blocking_xpromo_nsfw"] {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+html:not(.rnp-nsfw-off) :is(shreddit-post[nsfw], shreddit-post[spoiler])
+  :is(a[href], shreddit-pubsub-publisher)
+  + .absolute {
+  display: none !important;
+}
